@@ -7,6 +7,12 @@ resource "azurerm_mssql_server" "this" {
   administrator_login          = var.sql_admin_login
   administrator_login_password = var.sql_admin_password
   minimum_tls_version          = "1.2"
+
+  public_network_access_enabled = true
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_mssql_firewall_rule" "allow_azure_services" {
