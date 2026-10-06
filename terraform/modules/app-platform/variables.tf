@@ -13,7 +13,7 @@ variable "region_configurations" {
 
 variable "primary_region_key" {
   type        = string
-  description = "Key (from region_configurations) of the region that hosts the API, database, storage, and App Insights."
+  description = "Key (from region_configurations) of the region that hosts the API, App Insights, and Service Bus."
 }
 
 variable "client_region_key" {
@@ -21,7 +21,51 @@ variable "client_region_key" {
   description = "Key (from region_configurations) of the region that hosts the static web app client."
 }
 
+variable "compute_type" {
+  type    = string
+  default = "app_service"
+  validation {
+    condition     = contains(["app_service", "container_app"], var.compute_type)
+    error_message = "compute_type must be \"app_service\" or \"container_app\"."
+  }
+}
+
+variable "os_type" {
+  type    = string
+  default = "Windows"
+  validation {
+    condition     = contains(["Windows", "Linux"], var.os_type)
+    error_message = "os_type must be \"Windows\" or \"Linux\"."
+  }
+}
+
+variable "sku_name" {
+  type    = string
+  default = "F1"
+}
+
+variable "always_on" {
+  type    = bool
+  default = false
+}
+
+variable "dotnet_version" {
+  type    = string
+  default = "v10.0"
+}
+
+
+variable "compute_name_suffix" {
+  type    = string
+  default = "01"
+}
+
 variable "resource_name_suffix" {
+  type    = string
+  default = "01"
+}
+
+variable "service_bus_name_suffix" {
   type    = string
   default = "01"
 }
@@ -39,6 +83,21 @@ variable "daily_data_cap_in_gb" {
 variable "log_retention_in_days" {
   type    = number
   default = 30
+}
+
+variable "enable_service_bus" {
+  type    = bool
+  default = true
+}
+
+variable "service_bus_sku" {
+  type    = string
+  default = "Basic"
+}
+
+variable "service_bus_queue_names" {
+  type    = list(string)
+  default = ["submission-created", "submission-job-continuation", "game-time-expired"]
 }
 
 variable "static_web_app_sku_tier" {
@@ -144,7 +203,7 @@ variable "container_registry_password" {
   default   = null
 }
 
-variable "enable_storage" {
+variable "enable_avatar_storage" {
   type    = bool
   default = true
 }
@@ -154,74 +213,7 @@ variable "storage_account_name_suffix" {
   default = "01"
 }
 
-variable "storage_container_name" {
+variable "avatar_container_name" {
   type    = string
-  default = "uploads"
-}
-
-variable "enable_sql" {
-  type    = bool
-  default = true
-}
-
-variable "sql_admin_login" {
-  type    = string
-  default = "sqladmin"
-}
-
-variable "sql_admin_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "sql_database_max_size_gb" {
-  type    = number
-  default = 32
-}
-
-variable "sql_database_min_capacity" {
-  type    = number
-  default = 0.5
-}
-
-variable "sql_database_auto_pause_delay_in_minutes" {
-  type    = number
-  default = 60
-}
-
-variable "enable_clerk" {
-  type    = bool
-  default = true
-}
-
-variable "clerk_additional_redirect_urls" {
-  type        = list(string)
-  description = "Redirect URLs beyond the static web app's own hostname, e.g. localhost for local dev."
-  default     = ["http://localhost:3000/sso-callback"]
-}
-
-variable "clerk_allowlist_identifiers" {
-  type        = list(string)
-  description = "Email addresses (or *@domain wildcards) allowed to sign up while the instance is restricted. Leave empty to leave sign-ups open."
-  default     = []
-}
-
-variable "clerk_jwt_template_name" {
-  type    = string
-  default = "stack-duel"
-}
-
-variable "clerk_jwt_template_claims" {
-  type    = string
-  default = "{\"email\":\"{{user.primary_email_address}}\"}"
-}
-
-variable "clerk_jwt_lifetime" {
-  type    = number
-  default = 60
-}
-
-variable "enable_clerk_svix_webhook" {
-  type    = bool
-  default = true
+  default = "avatars"
 }
