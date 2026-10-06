@@ -9,18 +9,6 @@ variable "region_configurations" {
     location       = string
     resource_group = string
   }))
-  default = [
-    {
-      key            = "centralus"
-      location       = "centralus"
-      resource_group = "rg-sd-scrum-centralus-01"
-    },
-    {
-      key            = "eastus2"
-      location       = "eastus2"
-      resource_group = "rg-sd-scrum-eastus2-01"
-    }
-  ]
 }
 
 variable "primary_region_key" {
@@ -33,23 +21,29 @@ variable "client_region_key" {
   default = "eastus2"
 }
 
+variable "resource_group" {
+  type = string
+}
+
 variable "subscription_id" {
   type      = string
   sensitive = true
 }
 
-variable "sql_admin_password" {
+variable "aiven_project_name" {
   type      = string
   sensitive = true
 }
 
-variable "clerk_api_key" {
-  type      = string
-  sensitive = true
+variable "aiven_cloud_name" {
+  type = string
 }
 
-variable "clerk_allowlist_identifiers" {
-  type        = list(string)
-  description = "Email addresses (or *@domain wildcards) allowed to sign up. Leave empty to leave scrum sign-ups open."
-  default     = []
+variable "aiven_pg_plan" {
+  type = string
+}
+
+variable "aiven_api_token" {
+  type      = string
+  sensitive = true
 }

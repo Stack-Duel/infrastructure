@@ -2,8 +2,6 @@ provider "azurerm" {
   features {}
 }
 
-provider "azapi" {}
-
-provider "clerk" {
-  api_key = var.clerk_api_key
+provider "aiven" {
+  api_token = var.aiven_api_token
 }

@@ -10,21 +10,28 @@ output "resource_group_ids" {
   value = { for k, rg in azurerm_resource_group.this : k => rg.id }
 }
 
-output "container_app_id" {
-  value = azurerm_container_app.api.id
+output "web_app_id" {
+  value = (
+    var.compute_type == "container_app" ? azurerm_container_app.api[0].id :
+    var.os_type == "Windows" ? azurerm_windows_web_app.api[0].id :
+    azurerm_linux_web_app.api[0].id
+  )
 }
 
-output "container_app_fqdn" {
-  value = azurerm_container_app.api.latest_revision_fqdn
+output "web_app_default_hostname" {
+  value = (
+    var.compute_type == "container_app" ? azurerm_container_app.api[0].latest_revision_fqdn :
+    var.os_type == "Windows" ? azurerm_windows_web_app.api[0].default_hostname :
+    azurerm_linux_web_app.api[0].default_hostname
+  )
 }
 
-output "static_web_app_default_hostname" {
-  value = azurerm_static_web_app.client.default_host_name
-}
-
-output "static_web_app_api_key" {
-  value     = azurerm_static_web_app.client.api_key
-  sensitive = true
+output "web_app_possible_outbound_ips" {
+  value = (
+    var.compute_type == "container_app" ? null :
+    var.os_type == "Windows" ? azurerm_windows_web_app.api[0].possible_outbound_ip_address_list :
+    azurerm_linux_web_app.api[0].possible_outbound_ip_address_list
+  )
 }
 
 output "app_insights_connection_string" {
@@ -32,24 +39,11 @@ output "app_insights_connection_string" {
   sensitive = true
 }
 
-output "sql_server_fqdn" {
-  value = var.enable_sql ? azurerm_mssql_server.this[0].fully_qualified_domain_name : null
-}
-
-output "sql_database_name" {
-  value = var.enable_sql ? azurerm_mssql_database.this[0].name : null
-}
-
-output "storage_account_name" {
-  value = var.enable_storage ? azurerm_storage_account.this[0].name : null
-}
-
-output "storage_account_primary_connection_string" {
-  value     = var.enable_storage ? azurerm_storage_account.this[0].primary_connection_string : null
+output "service_bus_connection_string" {
+  value     = var.enable_service_bus ? azurerm_servicebus_namespace_authorization_rule.api[0].primary_connection_string : null
   sensitive = true
 }
 
-output "clerk_webhook_endpoint_url" {
-  description = "Paste this into the Clerk Dashboard's Webhooks page as the endpoint URL — the provider can't set it directly."
-  value       = "https://${azurerm_container_app.api.latest_revision_fqdn}/webhooks/clerk"
+output "servicebus_namespace_id" {
+  value = var.enable_service_bus ? azurerm_servicebus_namespace.this[0].id : null
 }

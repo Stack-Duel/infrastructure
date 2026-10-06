@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "stack-duel"
     workspaces {
-      name = "Scrum"
+      name = "Prod"
     }
   }
 
@@ -11,11 +11,6 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 4.61.0"
-    }
-
-    aiven = {
-      source  = "aiven/aiven"
-      version = "~> 4.0"
     }
   }
 }

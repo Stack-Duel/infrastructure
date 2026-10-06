@@ -1,4 +1,5 @@
 resource "azurerm_container_app_environment" "api" {
+  count                      = var.compute_type == "container_app" ? 1 : 0
   name                       = "cae-sdapi-${var.environment_key}-${var.primary_region_key}-${var.resource_name_suffix}"
   location                   = azurerm_resource_group.this[var.primary_region_key].location
   resource_group_name        = azurerm_resource_group.this[var.primary_region_key].name
@@ -6,8 +7,9 @@ resource "azurerm_container_app_environment" "api" {
 }
 
 resource "azurerm_container_app" "api" {
-  name                         = "ca-sdapi-${var.environment_key}-${var.primary_region_key}-${var.resource_name_suffix}"
-  container_app_environment_id = azurerm_container_app_environment.api.id
+  count                        = var.compute_type == "container_app" ? 1 : 0
+  name                         = "ca-sdapi-${var.environment_key}-${var.primary_region_key}-${var.compute_name_suffix}"
+  container_app_environment_id = azurerm_container_app_environment.api[0].id
   resource_group_name          = azurerm_resource_group.this[var.primary_region_key].name
   revision_mode                = "Single"
 
