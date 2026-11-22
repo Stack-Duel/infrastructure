@@ -48,8 +48,3 @@ output "storage_account_primary_connection_string" {
   value     = var.enable_storage ? azurerm_storage_account.this[0].primary_connection_string : null
   sensitive = true
 }
-
-output "clerk_webhook_endpoint_url" {
-  description = "Paste this into the Clerk Dashboard's Webhooks page as the endpoint URL — the provider can't set it directly."
-  value       = "https://${azurerm_container_app.api.latest_revision_fqdn}/webhooks/clerk"
-}
