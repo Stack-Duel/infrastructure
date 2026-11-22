@@ -16,8 +16,5 @@ terraform {
       source  = "Azure/azapi"
       version = "~> 2.0"
     }
-    clerk = {
-      source = "buildwithdeck/clerk"
-    }
   }
 }

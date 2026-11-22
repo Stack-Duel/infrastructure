@@ -189,39 +189,14 @@ variable "sql_database_auto_pause_delay_in_minutes" {
   default = 60
 }
 
-variable "enable_clerk" {
-  type    = bool
-  default = true
+variable "container_liveness_path" {
+  type        = string
+  description = "HTTP path the platform probes to decide whether the container is alive. Must not depend on the database."
+  default     = "/api/v1/health"
 }
 
-variable "clerk_additional_redirect_urls" {
-  type        = list(string)
-  description = "Redirect URLs beyond the static web app's own hostname, e.g. localhost for local dev."
-  default     = ["http://localhost:3000/sso-callback"]
-}
-
-variable "clerk_allowlist_identifiers" {
-  type        = list(string)
-  description = "Email addresses (or *@domain wildcards) allowed to sign up while the instance is restricted. Leave empty to leave sign-ups open."
-  default     = []
-}
-
-variable "clerk_jwt_template_name" {
-  type    = string
-  default = "stack-duel"
-}
-
-variable "clerk_jwt_template_claims" {
-  type    = string
-  default = "{\"email\":\"{{user.primary_email_address}}\"}"
-}
-
-variable "clerk_jwt_lifetime" {
-  type    = number
-  default = 60
-}
-
-variable "enable_clerk_svix_webhook" {
-  type    = bool
-  default = true
+variable "container_readiness_path" {
+  type        = string
+  description = "HTTP path the platform probes to decide whether the container can serve traffic. Returns 503 when a dependency is unreachable."
+  default     = "/api/v1/health/ready"
 }

@@ -11,8 +11,7 @@ terraform/
                      container, websockets work natively), Azure SQL
                      Database (serverless, Always Free limit), storage
                      account, static web app client, Log Analytics + App
-                     Insights, subscription budget, Clerk auth resources
-                     (redirect URLs, allowlist, JWT template, Svix).
+                     Insights, subscription budget.
   environments/
     scrum/           Non-prod/dev environment. Container App scaled to
                       zero by default, Azure SQL serverless on the Always
@@ -59,15 +58,3 @@ terraform apply -var-file="secret.tfvars"
   allowance is exhausted the database pauses instead of silently billing.
   Only one free database is allowed per subscription per region, so don't
   reuse `enable_sql = true` for a second environment in the same region.
-- Clerk resources come from the unofficial `buildwithdeck/clerk` provider
-  (not published by Clerk itself — audit it before relying on it for prod).
-  `clerk_redirect_url` entries point at the **Next.js** static web app
-  (`/sso-callback`), since that's where the browser lands after OAuth —
-  your .NET API is never involved in that flow. `clerk_svix_webhook` only
-  turns on the Svix integration; it can't create the actual endpoint, so
-  after `apply`, open the Clerk Dashboard's Webhooks page once and add an
-  endpoint using the `clerk_webhook_endpoint_url` output — that one *does*
-  point at the .NET container app, and your API needs a route there
-  (`POST /webhooks/clerk`) that verifies the Svix signature.
-- `clerk_allowlist_identifiers` is empty by default (open sign-ups). Add
-  your own email(s) there to lock scrum down to invite-only while testing.

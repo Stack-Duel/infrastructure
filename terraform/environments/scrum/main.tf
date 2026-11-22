@@ -20,10 +20,6 @@ module "scrum" {
   container_min_replicas = 0
   container_max_replicas = 1
 
-  enable_clerk                   = true
-  clerk_allowlist_identifiers    = var.clerk_allowlist_identifiers
-  clerk_additional_redirect_urls = ["http://localhost:3000/sso-callback"]
-
   enable_budget     = true
   enable_alerts     = true
   subscription_id   = var.subscription_id
