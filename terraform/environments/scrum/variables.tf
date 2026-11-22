@@ -42,14 +42,3 @@ variable "sql_admin_password" {
   type      = string
   sensitive = true
 }
-
-variable "clerk_api_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "clerk_allowlist_identifiers" {
-  type        = list(string)
-  description = "Email addresses (or *@domain wildcards) allowed to sign up. Leave empty to leave scrum sign-ups open."
-  default     = []
-}
