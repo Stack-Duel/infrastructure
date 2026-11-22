@@ -20,6 +20,18 @@ resource "azurerm_container_app" "api" {
       image  = var.container_image
       cpu    = var.container_cpu
       memory = var.container_memory
+
+      liveness_probe {
+        transport = "HTTP"
+        port      = var.container_target_port
+        path      = var.container_liveness_path
+      }
+
+      readiness_probe {
+        transport = "HTTP"
+        port      = var.container_target_port
+        path      = var.container_readiness_path
+      }
     }
   }
 

@@ -3,8 +3,5 @@ terraform {
     azapi = {
       source = "Azure/azapi"
     }
-    clerk = {
-      source = "buildwithdeck/clerk"
-    }
   }
 }

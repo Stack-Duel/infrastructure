@@ -10,14 +10,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.61.0"
+      version = "5.14.0"
     }
     azapi = {
       source  = "Azure/azapi"
       version = "~> 2.0"
-    }
-    clerk = {
-      source = "buildwithdeck/clerk"
     }
   }
 }
